@@ -1,42 +1,69 @@
 package Task;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
+import java.io.IOException;
+import java.util.Scanner;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class Edit{
-    public static void main(String[] args) throws Exception {
-        String filePath = "C:\\Users\\PranavKrishnamurthyB\\IdeaProjects\\readwrite\\gfgcontribute.xlsx";
+public class Edit {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-        // Open the Excel file
-        Workbook workbook = new XSSFWorkbook(new FileInputStream(filePath));
+        // Ask for the Excel file path
+        System.out.print("Enter the Excel file path: ");
+        String filePath = scanner.nextLine();
 
-        // Get the first sheet from the workbook
-        Sheet sheet = workbook.getSheetAt(0);
+        // Ask for the sheet number
+        System.out.print("Enter the sheet number: ");
+        int sheetNumber = scanner.nextInt();
 
-        // Get the fourth row from the sheet
-        Row row = sheet.getRow(3);
+        // Ask for the row number
+        System.out.print("Enter the row number: ");
+        int rowNumber = scanner.nextInt();
 
-        // Get the cell B in the fourth row
-        Cell cell = row.getCell(1);
+        // Ask for the column number
+        System.out.print("Enter the column number: ");
+        int columnNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character left by nextInt()
 
-        // Set the value of the cell to "SuryaKumar"
-        cell.setCellValue("SuryaKumar");
+        // Ask for the new string to replace
+        System.out.print("Enter the new string: ");
+        String newString = scanner.nextLine();
 
-        // Save the changes to the Excel file
-        FileOutputStream outputStream = new FileOutputStream(filePath);
-        workbook.write(outputStream);
-        outputStream.close();
+        scanner.close();
 
-        // Close the workbook
-        workbook.close();
+        try {
+            // Load the Excel file
+            FileInputStream file = new FileInputStream(new File(filePath));
+            Workbook workbook = new XSSFWorkbook(file);
+
+            // Get the specified sheet
+            Sheet sheet = workbook.getSheetAt(sheetNumber);
+
+            // Get the specified row
+            Row row = sheet.getRow(rowNumber);
+
+            // Get the specified cell
+            Cell cell = row.getCell(columnNumber);
+
+            // Set the new value for the cell
+            cell.setCellValue(newString);
+
+            // Write the changes back to the Excel file
+            FileOutputStream out = new FileOutputStream(new File(filePath));
+            workbook.write(out);
+            out.close();
+
+            System.out.println("Excel file updated successfully!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
-
-
-
